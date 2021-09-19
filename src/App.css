@@ -7,6 +7,16 @@
   pointer-events: none;
 }
 
+.site-page-header {
+  border: 1px solid rgb(235, 237, 240);
+}
+
+.card-image {
+	background-position: center;
+	background-size: cover;
+	height: 100%;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-float infinite 3s ease-in-out;
