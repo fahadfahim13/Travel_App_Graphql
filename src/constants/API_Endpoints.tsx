@@ -36,13 +36,13 @@ query holidays{
 }`
 
 export const LOGIN_API = gql`
-mutation Login {
+mutation Login($email: String!, $password: String!) {
   loginClient (
     auth: {
-      email: "devteam@saimonglobal.com"
+      email: $email,
       deviceUuid: "7026a238-d078-48b5-862b-c3c7d21d8712"
     }
-    password: "12345678"
+    password: $password
   )
   {
     message

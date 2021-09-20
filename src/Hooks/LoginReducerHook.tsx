@@ -5,7 +5,7 @@ export function LoginReducerHook(state: any, action: any) {
             return {
                 ...state,
                 isLoading: true,
-                errorReturned: ''
+                errorReturned: '',
             }
         }
         case 'success':{
@@ -15,24 +15,23 @@ export function LoginReducerHook(state: any, action: any) {
                 password: '',
                 isLoggedIn: true,
                 isLoading: false,
+                errorReturned: '',
             }
         }
         case 'error':{
             return {
                 ...state,
-                isLoggedin: false,
                 isLoading: false,
+                isLoggedin: false,
                 errorReturned: action.payload,
-                email: '',
-                password: ''
             }
         }
         case 'logout':{
             return {
                 ...state,
-                isLoggedin: false,
                 email: '',
-                password: ''
+                password: '',
+                isLoggedin: false,
             }
         }
         case 'setEmail':{

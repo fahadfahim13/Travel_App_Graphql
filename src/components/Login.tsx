@@ -15,12 +15,17 @@ const initialState = {
 
 function Login() {
     const [state, dispatch] = useReducer(LoginReducerHook, initialState)
+    
     const [loginFunction, { data, error }] = useMutation(LOGIN_API);
 
     useEffect(() => {
         if(data){
-            dispatch({type: 'success'})
-            localStorage.setItem('token', data.loginClient.result.token)
+            if(data.loginClient.statusCode === 200){
+                dispatch({type: 'success'})
+                localStorage.setItem('token', data.loginClient.result.token)
+            } else{
+                dispatch({type: 'error', payload: data.message})
+            }
         }
         if(error){
             dispatch({type: 'error', payload: error})
@@ -34,10 +39,7 @@ function Login() {
         try {
             await loginFunction({
                 variables:{
-                    auth: {
-                        email:state.email, 
-                        deviceUuid: "7026a238-d078-48b5-862b-c3c7d21d8712"
-                    }, 
+                    email:state.email, 
                     password: state.password
                 } 
             })
@@ -55,17 +57,22 @@ function Login() {
                 </h2>
             </header>
             <div className="card-content">
+                {(state.errorReturned!=='') && 
+                    <div className='level'>
+                        <h4 className="title is-5 level-item" style={{color: 'red'}}> Invalid Credential </h4>
+                    </div>
+                }
                 <div className="field">
                     <label className="label">Email</label>
                     <div className="control">
-                        <input className="input" type="email" placeholder="devteam@saimonglobal.com"
+                        <input className="input" type="email" placeholder="devteam@saimonglobal.com" value={state.email}
                         onChange={(e: any) => dispatch({type: 'setEmail', payload: e.currentTarget.value})} />
                     </div>
                 </div>
                 <div className="field">
                     <label className="label">Password</label>
                     <div className="control">
-                        <input className="input" type="password" placeholder="12345678"
+                        <input className="input" type="password" placeholder="12345678" value={state.password}
                         onChange={(e: any) => dispatch({type: 'setPassword', payload: e.currentTarget.value})} />
                     </div>
                 </div>
