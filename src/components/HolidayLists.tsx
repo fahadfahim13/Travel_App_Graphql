@@ -25,6 +25,7 @@ function HolidayLists() {
             } else {
                 sethasMore(false)
             }
+            console.log(packages)
             setcount(Math.max(data.getPackages.result.count, packages.length))
         }
     }, [data])

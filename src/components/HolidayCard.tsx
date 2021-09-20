@@ -7,12 +7,13 @@ import StartingPrice from './StartingPrice'
 
 
 function HolidayCard(props: Holiday) {
-    const { title, description, thumbnail, durationText, loyaltyPointText, amenities, startingPrice } = props
+    const { title, description, thumbnail, discount, durationText, loyaltyPointText, amenities, startingPrice } = props
     return (
         <div className="card card-shadow" style={{borderRadius: '20px', border: '1px solid #D5D8DC'}}>
             <div className="card-content">
                 <div className="columns is-mobile">
-                    <CardImage thumbnail={thumbnail} />
+                    {/* {discount && <h3>{discount.title}</h3>}<br /> */}
+                    <CardImage thumbnail={thumbnail} discountTitle={discount?discount.title:''} />
                     <div className="column is-mobile">
                         <div className="media-content">
                             <p className="title is-3" style={{color: 'navy', fontWeight: 'bold'}}>{title}</p>
