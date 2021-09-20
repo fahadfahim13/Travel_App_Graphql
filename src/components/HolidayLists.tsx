@@ -10,10 +10,10 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 function HolidayLists() {
     const [packages, setPackages]: any = useState([])
-    const [limit, setLimit] = useState({skip: 0, limit: 40})
+    const [limit, setLimit] = useState({skip: 0, limit: 4})
     const [hasMore, sethasMore] = useState(true)
     const [count, setcount] = useState(0)
-    const { data } = useQuery(GET_HOLIDAYS_QUERY(limit.skip, limit.limit));
+    const { data } = useQuery(GET_HOLIDAYS_QUERY, {variables: {skip: limit.skip, limit: limit.limit}});
 
 
     useEffect(() => {
@@ -25,7 +25,6 @@ function HolidayLists() {
             } else {
                 sethasMore(false)
             }
-            console.log(packages)
             setcount(Math.max(data.getPackages.result.count, packages.length))
         }
     }, [data])

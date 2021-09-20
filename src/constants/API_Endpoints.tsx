@@ -1,12 +1,12 @@
 import { gql } from "@apollo/client"
 
 export const GET_HOLIDAYS_API = 'https://b2c-api.flightlocal.com/graphql'
-export const GET_HOLIDAYS_QUERY = (skip: number, limit: number) => gql`
-query holidays{
+export const GET_HOLIDAYS_QUERY = gql`
+query holidays($skip: Int!, $limit: Int!){
   getPackages(
     pagination: {
-      skip: ${skip}
-      limit: ${limit}
+      skip: $skip
+      limit: $limit
     }
   )
   {
