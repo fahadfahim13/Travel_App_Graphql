@@ -1,33 +1,53 @@
 import React, { useEffect, useState } from 'react'
 import { GET_HOLIDAYS_QUERY } from '../constants/API_Endpoints'
 import { useQuery } from '@apollo/client'
-import { Button } from 'antd'
+import { Spin  } from 'antd'
 import HolidayCard from './HolidayCard'
+import { Holiday } from '../constants/HolidayInterfaces'
+import InfiniteScroll from 'react-infinite-scroll-component';
+
 
 
 function HolidayLists() {
     const [packages, setPackages]: any = useState([])
-    const [limit, setLimit] = useState({skip: 0, limit: 1})
+    const [limit, setLimit] = useState({skip: 0, limit: 40})
+    const [hasMore, sethasMore] = useState(true)
+    const [count, setcount] = useState(0)
     const { data } = useQuery(GET_HOLIDAYS_QUERY(limit.skip, limit.limit));
-    const increment = 1
-    // const { loading, error, data } = useQuery(GET_HOLIDAYS_QUERY);
+
 
     useEffect(() => {
-        if(data){
-            console.log(data.getPackages);
+        if(data){            
             let newPackages: any = data.getPackages.result.packages;
             
-            setPackages((p:any) => [...p, ...newPackages])
+            if(newPackages && newPackages.length > 0) { 
+                setPackages((p: any) => [...p, ...newPackages])
+            } else {
+                sethasMore(false)
+            }
+            setcount(Math.max(data.getPackages.result.count, packages.length))
         }
     }, [data])
 
+    const fetchOnScroll = () => {  
+        setLimit({
+            ...limit,
+            skip: limit.skip + 4
+        })
+    }
+
     return (
         <div>
-            {packages && packages.map((p: any) => <HolidayCard />)}
-            <Button onClick={() => setLimit({
-                ...limit,
-                skip: limit.skip + increment
-            })}>Get More</Button>
+            <p className="title is-4" style={{color: 'navy'}}> {count} Available Holidays </p>
+            <InfiniteScroll
+                dataLength={packages.length}
+                next={fetchOnScroll}
+                hasMore={hasMore}
+                loader={<div className="columns"><div className="column"><Spin /></div></div>}
+            >
+                {packages && packages.map((p: Holiday, idx: number) => <div key={idx}> <HolidayCard {...p} /> <br /> </div>)}
+                
+            </InfiniteScroll>
         </div>
     )
 }
