@@ -12,22 +12,21 @@ function HolidayLists() {
     const [packages, setPackages]: any = useState([])
     const [limit, setLimit] = useState({skip: 0, limit: 4})
     const [hasMore, sethasMore] = useState(true)
-    const [count, setcount] = useState(0)
     const { data } = useQuery(GET_HOLIDAYS_QUERY, {variables: {skip: limit.skip, limit: limit.limit}});
 
-
     useEffect(() => {
-        if(data){            
-            let newPackages: any = data.getPackages.result.packages;
-            
-            if(newPackages && newPackages.length > 0) { 
-                setPackages((p: any) => [...p, ...newPackages])
-            } else {
-                sethasMore(false)
-            }
-            setcount(Math.max(data.getPackages.result.count, packages.length))
+        if(!data){
+            return;
         }
-    }, [data, packages.length])
+        let newPackages: any = data.getPackages.result.packages;
+            
+        if(newPackages && newPackages.length > 0) { 
+            setPackages((p: any) => [...p, ...newPackages])
+        } else {
+            sethasMore(false)
+        }
+        
+    }, [data])
 
     const fetchOnScroll = () => {  
         setLimit({
@@ -38,7 +37,7 @@ function HolidayLists() {
 
     return (
         <div>
-            <p className="title is-4" style={{color: 'navy'}}> {count} Available Holidays </p>
+            <p className="title is-4" style={{color: 'navy'}}> {packages.length} Available Holidays </p>
             <InfiniteScroll
                 dataLength={packages.length}
                 next={fetchOnScroll}
