@@ -27,7 +27,7 @@ function HolidayLists() {
             }
             setcount(Math.max(data.getPackages.result.count, packages.length))
         }
-    }, [data])
+    }, [data, packages.length])
 
     const fetchOnScroll = () => {  
         setLimit({
